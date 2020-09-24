@@ -1,0 +1,29 @@
+@import "variables";
+
+@function set-color-by($color) {
+  @if (lightness($color) > 70) {
+    @return map_get($colors, 'dark')
+  } @else {
+    @return map_get($colors, light)
+  }
+}
+
+@function setFontFamily($font-family: 'source') {
+  @if (map_has_key($fonts, $font-family)) {
+    @return map_get($fonts, $font-family)
+  } @else {
+    @error 'Font not found'
+  }
+}
+
+@mixin generatePallete($colors) {
+  @each $colorName, $color in $colors {
+    @for $i from 1 through 4 {
+      &#{$colorName}-light-#{$i*10} {color: lighten($color, $i * 10)};
+    }
+    &#{$colorName} {color: $color};
+    @for $i from 1 through 4 {
+      &#{$colorName}-dark-#{$i*10} {color: darken($color, $i * 10)};
+    }
+  }
+}
